@@ -1,6 +1,7 @@
 import React from "react";
 import { Container, Image, Text, Strong } from "./styles";
 import logo from "../../assets/images/logo.png";
+
 const Header: React.FC = () => {
   return (
     <Container>
