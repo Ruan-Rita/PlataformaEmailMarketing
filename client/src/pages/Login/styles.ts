@@ -54,7 +54,7 @@ export const DivMarketing = styled.section`
     font-size: 1.4rem;
   }
 `;
-export const LoginContainer = styled.form`
+export const LoginContainer = styled.div`
   width: 50%;
 
   display: flex;

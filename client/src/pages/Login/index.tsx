@@ -1,26 +1,59 @@
 import React, { useState } from "react";
-import {
-  Container,
-  Content,
-  DivImg,
-  LoginContainer,
-  DivMarketing,
-} from "./styles";
+import { Content, DivImg, LoginContainer, DivMarketing } from "./styles";
 import logo from "../../assets/images/logo-text.png";
 import imgMain from "../../assets/images/email-marketing.png";
 import InputComponent from "../../components/FormsComponents/InputComponent";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import SubmitButton from "../../components/FormsComponents/SubmitButton";
+import { API } from "../../utils/API";
+import { useToasts } from "react-toast-notifications";
 
 const Login: React.FC = () => {
-  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const { addToast } = useToasts();
+  const navigate = useNavigate();
 
-  function onSumitForm() {
-    console.log("Cadastrar");
+  async function onSumitLogin() {
+    const response = await API("post", "login", {
+      email,
+      password,
+    });
+    const data: any = response.data;
+    const error: any = response.error;
+
+    console.log("testeeee", data.data.message);
+
+    if (error) {
+      addToast(data.data.message, {
+        appearance: "error",
+        autoDismiss: true,
+      });
+      return;
+    }
+    if (data.error) {
+      addToast(data.data.message, {
+        appearance: "error",
+        autoDismiss: true,
+      });
+      return;
+    }
+    
+    const userTokens: any = data.data;
+
+    const dataResponse: any = {
+      user: JSON.stringify(userTokens.username),
+      email: JSON.stringify(userTokens.email),
+      token: userTokens.token,
+    };
+
+    Object.keys(dataResponse).forEach((key) => {
+      localStorage.setItem(key, dataResponse[key]);
+    });
+    navigate("/dashboard");
   }
+
   return (
     <Content>
       <DivMarketing>
@@ -67,14 +100,13 @@ const Login: React.FC = () => {
             <InputComponent
               onChange={(e) => setShowPassword(e.target.checked)}
               checked={showPassword}
-              
               type="checkbox"
               label="Exibir senha"
               placeholder="Digite o seu e-mail"
             />
           </label>
           <span className="submitButton">
-            <SubmitButton label="Registrar" onClick={() => onSumitForm()} />
+            <SubmitButton onClick={() => onSumitLogin()} label="Entrar" />
           </span>
           <h5>
             Não tem conta? <Link to="/register">Criar conta</Link>

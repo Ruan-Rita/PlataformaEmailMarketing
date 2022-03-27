@@ -2,7 +2,7 @@ import React from 'react'
 import { ButtonCreate } from './styles'
 
 interface ISubmitButton {
-  onClick: React.MouseEventHandler<HTMLButtonElement>
+  onClick?: React.MouseEventHandler<HTMLButtonElement>
   label: string
   disable?: boolean
   style?: object

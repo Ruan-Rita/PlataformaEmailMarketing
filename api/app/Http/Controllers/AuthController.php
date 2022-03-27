@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 
 class AuthController extends Controller
 {
@@ -16,14 +18,14 @@ class AuthController extends Controller
                     'password' => 'required',
                 ]);
             }catch(\Throwable $error){
-                return ApiController::ApiError(400, 'Field Required', $error->getMessage());
+                return ApiController::ApiError(400, 'Field Required or email is exist', $error->getMessage());
             }
             $data = $request->all();
             
             $newUser = User::create([
                 'name' => $data['name'],
                 'email' => $data['email'],
-                'password' => bcrypt($data['password']),
+                'password' => Hash::make($data['password']),
             ]);
             
             $token = $newUser->createToken($newUser->name . $newUser->email)->plainTextToken;
@@ -51,14 +53,14 @@ class AuthController extends Controller
                 return ApiController::ApiError(400, 'Field Required', $error->getMessage());
             }
             $data = $request->all();
-            
             $user = User::where([
                 'email' => $data['email'],
-                'password' => bcrypt($data['password']),
+                'password' => Hash::make($data['password']),
                 ])
                 ->first();
+                ($user);
+            if(!$user) return ApiController::ApiError(400, 'Invalid credencials');
 
-            if(!$user) ApiController::ApiError(400, 'Invalid credencials');
             
             $token = $user->createToken($user->name . $user->email)->plainTextToken;
             

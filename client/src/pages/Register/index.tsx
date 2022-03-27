@@ -2,17 +2,58 @@ import React, { useState } from "react";
 import { Container, Content, DivImg, RegisterContainer } from "./styles";
 import logo from "../../assets/images/logo-purple.png";
 import InputComponent from "../../components/FormsComponents/InputComponent";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import SubmitButton from "../../components/FormsComponents/SubmitButton";
+import { useToasts } from "react-toast-notifications";
+import { API } from "../../utils/API";
 
 const Register: React.FC = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const { addToast } = useToasts();
+  const navigate = useNavigate();
 
-  function onSumitForm() {
-    console.log("Cadastrar");
+  async function onSumitForm() {
+    const response = await API("post", "register", {
+      email,
+      password,
+      name,
+    });
+    const data: any = response.data;
+    const error: any = response.error;
+
+    console.log("testeeee", data.data.message);
+
+    if (error) {
+      addToast(data.data.message, {
+        appearance: "error",
+        autoDismiss: true,
+      });
+      return;
+    }
+    if (data.error) {
+      addToast(data.data.message, {
+        appearance: "error",
+        autoDismiss: true,
+      });
+      return;
+    }
+    console.log("teste de requisção", data);
+    const userTokens: any = data.data;
+    console.log("passou estou logado", userTokens);
+
+    const dataResponse: any = {
+      user: JSON.stringify(userTokens.username),
+      email: JSON.stringify(userTokens.email),
+      token: userTokens.token,
+    };
+
+    Object.keys(dataResponse).forEach((key) => {
+      localStorage.setItem(key, dataResponse[key]);
+    });
+    navigate("/dashboard");
   }
   return (
     <Container>

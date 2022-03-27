@@ -33,7 +33,7 @@ export const DivImg = styled.div`
   }
 `;
 
-export const RegisterContainer = styled.form`
+export const RegisterContainer = styled.div`
   width: 600px;
   padding: 40px 80px;
   border-radius: 30px;
