@@ -5,6 +5,14 @@ export const DivInput = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+
+  .chipInput {
+    margin-top: 15px;
+  }
+  .MuiInput-root{
+    width: 100% ;
+  }
+
   label {
     color: ${(props) => props.theme.title};
     font-family: Inter, sans-serif;

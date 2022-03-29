@@ -25,7 +25,7 @@ class AuthController extends Controller
             $newUser = User::create([
                 'name' => $data['name'],
                 'email' => $data['email'],
-                'password' => Hash::make($data['password']),
+                'password' => bcrypt($data['password']),
             ]);
             
             $token = $newUser->createToken($newUser->name . $newUser->email)->plainTextToken;
@@ -55,12 +55,12 @@ class AuthController extends Controller
             $data = $request->all();
             $user = User::where([
                 'email' => $data['email'],
-                'password' => Hash::make($data['password']),
                 ])
                 ->first();
                 ($user);
-            if(!$user) return ApiController::ApiError(400, 'Invalid credencials');
+            if(!$user || !hash::check($data['password'], $user->password)) return ApiController::ApiError(400, 'Invalid credencials');
 
+            
             
             $token = $user->createToken($user->name . $user->email)->plainTextToken;
             

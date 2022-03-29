@@ -8,6 +8,7 @@ interface IModalCommon {
   setModalOpen: any;
   children: any;
   title: string;
+  width?: string;
 }
 
 const ModalCommon: React.FC<IModalCommon> = ({
@@ -15,6 +16,7 @@ const ModalCommon: React.FC<IModalCommon> = ({
   setModalOpen,
   children,
   title,
+  width,
 }) => {
   const customStyles = {
     content: {
@@ -29,7 +31,7 @@ const ModalCommon: React.FC<IModalCommon> = ({
 
   return (
     <Modal isOpen={modalOpen} style={customStyles}>
-      <FormModal>
+      <FormModal style={{ width: width ? width : "" }}>
         <HeaderModal>
           <h2>{title}</h2>
           <MdOutlineClose onClick={() => setModalOpen(false)} />

@@ -1,19 +1,22 @@
 import axios from "axios";
-import { config } from "../env";
+import { config } from "../env-example";
 
 function authHeader() {
-  const user = JSON.parse(localStorage.getItem("user") ?? "");
-  if (user && user.token) {
-    return { Authorization: `Bearer  ${user.token}` };
-  } else {
-    return {};
+  const token = localStorage.getItem("token");
+  console.log("entassso", token);
+  let header: any = "";
+  if (token && token != "") {
+    header = { Authorization: `Bearer  ${token}` };
   }
+  console.log("final", header);
+  return header;
 }
 
 const instance = axios.create({
   baseURL: config.API,
+
   headers: {
-    ...authHeader,
+    ...authHeader(),
     "Content-Type": "application/json; multipart/form-data",
   },
 });

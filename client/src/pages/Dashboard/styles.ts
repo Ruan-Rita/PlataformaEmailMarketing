@@ -3,7 +3,9 @@ import styled from "styled-components";
 export const Container = styled.main`
   width: 100%;
 `;
-
+export const Template = styled.object`
+  margin-top: 10px;
+`;
 export const Content = styled.div`
   width: 100%;
   max-width: 1100px;
@@ -33,7 +35,13 @@ export const DataTable = styled.div`
   section {
     max-height: 400px;
     overflow: auto;
-
+    .showTemplate {
+      h4 {
+        color: ${(props) => props.theme.backgroundPrimary};
+        font-weight: 700;
+        cursor: pointer;
+      }
+    }
     &::-webkit-scrollbar {
       width: 5px;
       height: 8px;
